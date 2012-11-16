@@ -47,7 +47,14 @@ module TinyServer
 
     # 5 == debug, 3 == warning
     LOGGER = WEBrick::Log.new(STDOUT, 3)
-    DEFAULT_OPTIONS = {:server => 'webrick', :Port => 9000, :Host => 'localhost', :environment => :none, :Logger => LOGGER}
+    DEFAULT_OPTIONS = {
+      :server => 'webrick',
+      :Port => 9000,
+      :Host => 'localhost',
+      :environment => :none,
+      :Logger => LOGGER,
+      :AccessLog => [] # Remove this option to enable the access log when debugging.
+    }
 
     def initialize(options=nil)
       @options = options ? DEFAULT_OPTIONS.merge(options) : DEFAULT_OPTIONS
@@ -71,7 +78,6 @@ module TinyServer
     def block_until_started
       200.times do
         if started?
-          pp :@server => @server
           raise "ivar weirdness" if @server.nil?
           return true
         end
